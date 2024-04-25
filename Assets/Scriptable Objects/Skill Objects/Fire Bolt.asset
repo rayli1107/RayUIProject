@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 523dabd408e09d542a8f4ffe953bff6a, type: 3}
-  m_Name: Skill
+  m_Name: Fire Bolt
   m_EditorClassIdentifier: 
-  skillName: 
-  skillSprite: {fileID: 0}
-  skillCooldown: 0
+  skillName: Fire Bolt
+  skillSprite: {fileID: 21300000, guid: a19cebe0599724c469f757f6e0b2d9a4, type: 3}
+  skillCooldown: 3

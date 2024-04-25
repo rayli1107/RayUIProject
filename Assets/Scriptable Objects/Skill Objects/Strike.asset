@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 523dabd408e09d542a8f4ffe953bff6a, type: 3}
   m_Name: Strike
   m_EditorClassIdentifier: 
-  skillName: 
-  skillSprite: {fileID: 0}
-  skillCooldown: 0
+  skillName: Strike
+  skillSprite: {fileID: 21300000, guid: 8cc7ca0e29ced7b4f84e8c4ef7deb28b, type: 3}
+  skillCooldown: 2
