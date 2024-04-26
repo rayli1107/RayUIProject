@@ -37,13 +37,11 @@ public class PlayerStatController : MonoBehaviour
 
     public void onAddButton()
     {
-        Debug.Log("PlayerStatController.onAddButton");
         _playerUIController.playerState.TryAllocateAttribute(_statType);
     }
 
     public void onRemoveButton()
     {
-        Debug.Log("PlayerStatController.onRemoveButton");
         _playerUIController.playerState.ReturnAttribute(_statType);
     }
 

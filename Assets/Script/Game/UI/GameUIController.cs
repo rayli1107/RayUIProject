@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameUIController : MonoBehaviour
 {
@@ -13,6 +14,10 @@ public class GameUIController : MonoBehaviour
     private PlayerUIController _playerDetailsPanel;
     [SerializeField]
     private InventoryUIManager _inventoryManager;
+    [SerializeField]
+    private QuestUIManager _questManager;
+    [SerializeField]
+    private Image _backgroundImage;
 #pragma warning restore 0649
 
     public static GameUIController Instance { get; private set; }
@@ -22,13 +27,20 @@ public class GameUIController : MonoBehaviour
         Instance = this;
     }
 
-    public void Initialize(PlayerState playerState)
+    public void Initialize(PlayerState playerState, LevelData level)
     {
         _playerSimplePanel.Initialize(playerState);
         _playerDetailsPanel.Initialize(playerState);
 
         _inventoryManager.playerState = playerState;
         _inventoryManager.Initialize();
+
+        if (level != null)
+        {
+            _backgroundImage.sprite = level.levelImage;
+        }
+
+        _questManager.Initialize(playerState.quests);
     }
 
     // Start is called before the first frame update
@@ -47,4 +59,10 @@ public class GameUIController : MonoBehaviour
     {
         _optionPanel.gameObject.SetActive(true);
     }
+
+    public void onQuestsButton()
+    {
+        _questManager.gameObject.SetActive(true);
+    }
+
 }

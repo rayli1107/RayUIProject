@@ -33,6 +33,7 @@ public class InventoryUIManager : MonoBehaviour
     {
         _itemControllers = GetComponentsInChildren<ItemUIController>(true);
     }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -85,6 +86,10 @@ public class InventoryUIManager : MonoBehaviour
 
     private void showInventoryPage()
     {
+        if (!gameObject.activeInHierarchy)
+        {
+            return;
+        }
         foreach (ItemUIController item in _itemControllers)
         {
             item.item = null;

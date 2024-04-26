@@ -2,6 +2,15 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+[Serializable]
+public class LevelData
+{
+    public string levelName;
+    public Sprite levelImage;
+    public bool locked;
+    public int stars;
+}
+
 public static class GlobalGameConfig
 {
     public static Action statUpdateAction;
@@ -20,6 +29,8 @@ public static class GlobalGameConfig
     private static bool _isInitialized = false;
     public static bool isInitialized => _isInitialized;
 
+    public static LevelData level;
+
     public static void Initialize()
     {
         audioVolume = 0.2f;
@@ -34,8 +45,9 @@ public static class GlobalSceneManager
         SceneManager.LoadScene("MenuScene");
     }
 
-    public static void LoadGameScene()
+    public static void LoadGameScene(LevelData level)
     {
+        GlobalGameConfig.level = level;
         SceneManager.LoadScene("GameScene");
     }
 }

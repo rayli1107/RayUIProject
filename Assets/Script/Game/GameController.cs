@@ -4,6 +4,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class Item
+{
+    public string itemName;
+    public Sprite itemSprite;
+    public bool stackable = false;
+}
+
 public class InventoryItem
 {
     public Item item { get; private set; }
@@ -49,6 +57,36 @@ public class PlayerStat
     }
 }
 
+public class QuestEntry
+{
+    public enum QUEST_STATE
+    {
+        NEW,
+        ACCEPTED,
+        FINISHED
+    };
+
+    private QUEST_STATE _questState;
+    public QUEST_STATE questState
+    {
+        get => _questState;
+        set
+        {
+            _questState = value;
+            callback?.Invoke();
+        }
+    }
+
+    public string questName;
+    public Action callback;
+
+    public QuestEntry(string questName, QUEST_STATE questState)
+    {
+        this.questName = questName;
+        this.questState = questState;
+    }
+}
+
 public class PlayerState
 {
     private PlayerObject _playerObject;
@@ -60,6 +98,7 @@ public class PlayerState
     public List<InventoryItem> weapons { get; private set; }
     public List<InventoryItem> armors { get; private set; }
     public List<InventoryItem> items { get; private set; }
+    public List<QuestEntry> quests { get; private set; }
 
     public string playerName => _playerObject.playerName;
     public Sprite playerSprite => _playerObject.playerSprite;
@@ -87,7 +126,8 @@ public class PlayerState
         PlayerObject playerObject,
         List<Item> weapons,
         List<Item> armors,
-        List<Item> items)
+        List<Item> items,
+        string[] questNames)
     {
         _playerObject = playerObject;
         availableAttributes = 10;
@@ -110,6 +150,25 @@ public class PlayerState
             PlayerStat.STAT_TYPE.DEFENSE, "Defense", _playerObject.defense, 1);
         _stats[PlayerStat.STAT_TYPE.MAGIC] = new PlayerStat(
             PlayerStat.STAT_TYPE.MAGIC, "Magic", _playerObject.magic, 1);
+
+        quests = new List<QuestEntry>();
+        foreach (string questName in questNames)
+        {
+            QuestEntry.QUEST_STATE questState;
+            switch (random.Next(3))
+            {
+                case 1:
+                    questState = QuestEntry.QUEST_STATE.NEW;
+                    break;
+                case 2:
+                    questState = QuestEntry.QUEST_STATE.ACCEPTED;
+                    break;
+                default:
+                    questState = QuestEntry.QUEST_STATE.FINISHED;
+                    break;
+            }
+            quests.Add(new QuestEntry(questName, questState));
+        }
     }
 
     public bool TryAllocateAttribute(PlayerStat.STAT_TYPE statType)
@@ -158,6 +217,8 @@ public class GameController : MonoBehaviour
     private List<Item> _armors;
     [SerializeField]
     private List<Item> _items;
+    [SerializeField]
+    private string[] _quests;
 #pragma warning restore 0649
 
     public System.Random Random { get; private set; }
@@ -179,8 +240,8 @@ public class GameController : MonoBehaviour
         }
         _speed = 100;
         _speedSlider.value = _speed;
-        _playerState = new PlayerState(Random, _playerObject, _weapons, _armors, _items);
-        GameUIController.Instance.Initialize(_playerState);
+        _playerState = new PlayerState(Random, _playerObject, _weapons, _armors, _items, _quests);
+        GameUIController.Instance.Initialize(_playerState, GlobalGameConfig.level);
     }
 
     public void onSliderValueChange()
